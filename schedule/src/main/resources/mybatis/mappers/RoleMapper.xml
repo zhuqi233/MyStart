@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdl.schedule.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.gdl.schedule.entity.Role" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="names" property="names" jdbcType="VARCHAR" />
+    <result column="sorting" property="sorting" jdbcType="INTEGER" />
+    <result column="menus" property="menus" jdbcType="VARCHAR" />
+    <result column="articleMenus" property="articlemenus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, names, sorting, menus, articleMenus
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gdl.schedule.entity.Role" >
+    insert into t_role (id, names, sorting, 
+      menus, articleMenus)
+    values (#{id,jdbcType=INTEGER}, #{names,jdbcType=VARCHAR}, #{sorting,jdbcType=INTEGER}, 
+      #{menus,jdbcType=VARCHAR}, #{articlemenus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gdl.schedule.entity.Role" >
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="names != null" >
+        names,
+      </if>
+      <if test="sorting != null" >
+        sorting,
+      </if>
+      <if test="menus != null" >
+        menus,
+      </if>
+      <if test="articlemenus != null" >
+        articleMenus,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="names != null" >
+        #{names,jdbcType=VARCHAR},
+      </if>
+      <if test="sorting != null" >
+        #{sorting,jdbcType=INTEGER},
+      </if>
+      <if test="menus != null" >
+        #{menus,jdbcType=VARCHAR},
+      </if>
+      <if test="articlemenus != null" >
+        #{articlemenus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gdl.schedule.entity.Role" >
+    update t_role
+    <set >
+      <if test="names != null" >
+        names = #{names,jdbcType=VARCHAR},
+      </if>
+      <if test="sorting != null" >
+        sorting = #{sorting,jdbcType=INTEGER},
+      </if>
+      <if test="menus != null" >
+        menus = #{menus,jdbcType=VARCHAR},
+      </if>
+      <if test="articlemenus != null" >
+        articleMenus = #{articlemenus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gdl.schedule.entity.Role" >
+    update t_role
+    set names = #{names,jdbcType=VARCHAR},
+      sorting = #{sorting,jdbcType=INTEGER},
+      menus = #{menus,jdbcType=VARCHAR},
+      articleMenus = #{articlemenus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

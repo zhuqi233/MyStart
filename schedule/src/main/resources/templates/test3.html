@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>完整demo</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+  <link th:href="@{lib/bootstrap/css/bootstrap.css}" rel="stylesheet">
+  <!--[if IE]>
+  <script th:src="@{lib/html5shiv.js}"></script>
+  <![endif]-->
+  <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+  <script th:src="@{lib/bootstrap/js/bootstrap.js}"></script>
+  <script th:src="@{lib/jQueryDistpicker/js/distpicker.data.js}"></script>
+  <script th:src="@{lib/jQueryDistpicker/js/distpicker.js}"></script>
+  <script th:src="@{lib/jQueryDistpicker/js/main.js}"></script>
+
+</head>
+<body>
+<input id="btnPrint0" type="button" value="打印" onclick="javascript:window.print();" />
+<input id="btnPrint1" type="button" value="打印预览1" onclick=preview(1) />
+<input id="btnPrint2" type="button" value="打印预览2" onclick=preview(2) />
+<style type="text/css" media=print>
+  .noprint{display : none }
+</style>
+<p class="noprint">不需要打印的地方</p>
+<!--打印部分-->
+<script>
+    function preview(oper) {
+        if (oper < 10) {
+            bdhtml=window.document.body.innerHTML;//获取当前页的html代码
+            sprnstr="<!--startprint"+oper+"-->";//设置打印开始区域
+            eprnstr="<!--endprint"+oper+"-->";//设置打印结束区域
+            prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18); //从开始代码向后取html
+            prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));//从结束代码向前取html
+            window.document.body.innerHTML=prnhtml;
+            window.print();
+            window.document.body.innerHTML=bdhtml;
+        } else {
+            window.print();
+        }
+    }
+</script>
+<p>这部分也不打印</p>
+<!--startprint1-->要打印的内容1<!--endprint1-->
+<!--startprint2-->要打印的内容2<!--endprint2-->
+<hr/>
+<!--省市区级联-->
+<div id="target" data-toggle="distpicker"><!-- container -->
+  <select data-province="---- 选择省 ----"></select>
+  <select data-city="---- 选择市 ----"></select>
+  <select data-district="---- 选择区 ----"></select>
+</div>
+<script type="text/javascript">
+    $('#target').distpicker({
+        autoSelect: false
+        // province: '---- 所在省 ----',
+        // city: '---- 所在市 ----',
+        // district: '---- 所在区 ----'
+    });
+    // autoSelect：类型：Boolean，默认值：true。是否当省改变时自动选择市和区。
+    // placeholder：类型：Boolean，默认值：true。是否显示占位文本。
+    // province：类型：String，默认值：―― 省 ――。定义省份的初始值。如果在distpicker.data.js文件中存在该省份，将会被选择，否则显示占位文本。
+    // city：类型：String，默认值：―― 市 ――。定义市的初始值。如果在distpicker.data.js文件中存在该市，将会被选择，否则显示占位文本。
+    // district：类型：String，默认值：―― 区 ――。定义区的初始值。如果在distpicker.data.js文件中存在该区，将会被选择，否则显示占位文本。
+</script>
+<hr/>
+<!--树形结构-->
+<link rel="stylesheet" th:href="@{lib/zTree/v3/css/zTreeStyle/zTreeStyle.css}" type="text/css">
+<script type="text/javascript" th:src="@{lib/zTree/v3/js/jquery.ztree.core-3.5.js}"></script>
+<script type="text/javascript">
+    var zTreeObj;
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {};
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zNodes = [
+        {name:"test1", open:true, children:[
+                {name:"test1_1"}, {name:"test1_2"}]},
+        {name:"test2", open:true, children:[
+                {name:"test2_1"}, {name:"test2_2"}]}
+    ];
+    $(document).ready(function(){
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+</script>
+<div>
+  <ul id="treeDemo" class="ztree"></ul>
+</div>
+</body>
+</html>

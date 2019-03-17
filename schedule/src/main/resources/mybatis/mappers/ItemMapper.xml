@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.gdl.schedule.mapper.ItemMapper">
+	<!-- 根据id查询项目 -->
+	<!-- Item findItemById(Integer id) -->
+	<select id="findItemById"
+			resultType="com.gdl.schedule.entity.Item">
+		SELECT
+		   id,
+		   itemName,
+		   sorting,
+		   isEnable,
+		   userID
+		FROM
+			 t_item
+		WHERE
+			 id=#{id}
+	</select>
+	<!-- 根据用户ID查询项目 -->
+	<!-- List<Item> findItemByUid(Integer userID) -->
+	<select id="findItemByUid"
+		resultType="com.gdl.schedule.entity.Item">
+		SELECT
+			   id,
+			   itemName,
+			   sorting,
+			   isEnable,
+			   userID
+		FROM
+			 t_item
+		WHERE
+			  userID=#{userID}
+	</select>
+	<!-- 根据项目名称查询项目 -->
+	<!-- Item findItemByItemname(String itemname) -->
+	<select id="findItemByItemname"
+			resultType="com.gdl.schedule.entity.Item">
+		SELECT
+			   id,
+			   itemName,
+			   sorting,
+			   isEnable,
+			   userID
+		FROM
+			 t_item
+		WHERE
+				itemName=#{itemName}
+	</select>
+
+	<!-- 新建项目 -->
+	<!-- Integer insertItem(Item item) -->
+	<insert id="insertItem"
+		parameterType="com.gdl.schedule.entity.Item"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_item (
+			itemName,
+			sorting,
+			isEnable,
+			userID
+		) VALUES (
+			#{itemName},
+			#{sorting},
+			#{isEnable},
+			#{userID}
+		)
+	</insert>
+	
+	<!-- 修改项目信息 -->
+	<!-- Integer updateItem(Item item) -->
+	<update id="updateItem"
+		parameterType="com.gdl.schedule.entity.Item">
+		UPDATE
+			t_item
+		SET 
+			<if test="itemName != null">
+				itemName=#{itemName},
+			</if>
+			<if test="sorting != null">
+				sorting=#{sorting},
+			</if>
+			<if test="isEnable != null">
+				isEnable=#{isEnable},
+			</if>
+			<if test="userID != null">
+				userID=#{userID},
+			</if>
+			id=#{id}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<!-- 根据id删除项目 -->
+	<!-- Integer deleteItem(Integer id) -->
+	<delete id="deleteItem">
+		DELETE FROM
+			t_item
+		WHERE
+			id=#{id}
+	</delete>
+
+</mapper>
+
+
+
+
+
+
+

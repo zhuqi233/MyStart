@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" th:src="@{lib/html5shiv.js}"></script>
+<script type="text/javascript" th:src="@{lib/respond.min.js}"></script>
+
+<![endif]-->
+<link rel="stylesheet" type="text/css" th:href="@{static/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{static/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{static/h-ui.admin/css/style.css}" />
+<!--[if IE 6]>
+<script type="text/javascript" th:src="@{lib/DD_belatedPNG_0.0.8a-min.js}" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>添加产品分类</title>
+</head>
+<body>
+<div class="page-container">
+	<form action="/item_handleUpdate" method="post" class="form form-horizontal" id="form-user-update">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>
+				项目名称：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="text" class="input-text" value="" placeholder="" id="user-name" name="product-category-name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>
+				状态：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="radio" value="0" placeholder="" id="enable_n" name="isEnable"/>
+                <label>未启用</label>
+                <input type="radio" value="1" placeholder="" id="enable_y" name="isEnable"/>
+                <label>已启用</label>
+			</div>
+		</div>
+        <input id="iid" name="id" value="" type="hidden"/>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">备注：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<textarea name="" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" onKeyUp="$.Huitextarealength(this,100)"></textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-9 col-offset-2">
+				<input id="submit" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;修改&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{static/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{static/h-ui.admin/js/H-ui.admin.js}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+<script type="text/javascript">
+//获取url参数
+function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) {
+        return unescape(r[2]);
+    }
+    return null;
+}
+
+$(function(){
+    var id = getQueryString("id");
+    $("#iid").val(id);
+    console.log( $("#iid").val());
+    //获取原数据并显示
+    $.ajax({
+        "url": "handle_findItemByID",
+        "data": {"id":id},
+        "type": "POST",
+        "dataType": "json",
+        "success": function(obj) {
+            var enable = obj.data.isEnable;
+            if (obj.state==1){
+                $("#user-name").val(obj.data.itemName);
+                if(enable==0){
+                    $("#enable_n").attr("checked","checked");
+                }else {
+                    $("#enable_y").attr("checked","checked");
+                }
+            } else{
+                layer.msg(obj.message);
+            }
+        },
+        error: function (obj) {
+            layer.msg("系统错误");
+        }
+    });
+
+    //提交修改信息
+    $("#submit").click(function () {
+        var itemname = $("#user-name").val();
+        if (itemname==""||itemname==null){
+            layer.msg("信息不合法",{time:1000});
+            return;
+        }
+        //form-user-update.submit();
+        layer.msg("提交成功");
+    });
+});
+</script>
+</body>
+</html>

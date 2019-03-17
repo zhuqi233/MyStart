@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.gdl.schedule.mapper.PlanMapper">
+	<!-- 根据id查询计划 -->
+	<!-- Plan findPlanById(Integer id) -->
+	<select id="findPlanById" resultType="com.gdl.schedule.entity.Plan">
+		SELECT
+		   id,
+		   planDate,
+		   planWork,
+		   actualWork,
+		   actualWorkDate,
+		   complete,
+		   completeDate,
+		   itemID,
+		   userID
+		FROM
+			 t_plan
+		WHERE
+			 id=#{id}
+	</select>
+	<!-- 根据项目ID查询计划 -->
+	<!-- List<Plan> findPlanByItemID(Integer itemID) -->
+	<select id="findPlanByItemID" resultType="com.gdl.schedule.entity.Plan">
+		SELECT
+		   id,
+		   planDate,
+		   planWork,
+		   actualWork,
+		   actualWorkDate,
+		   complete,
+		   completeDate,
+		   itemID,
+		   userID
+		FROM
+			t_plan
+		WHERE
+			itemID=#{itemID}
+	</select>
+
+	<!-- 新建计划 -->
+	<!-- Integer insertPlan(Plan plan) -->
+	<insert id="insertPlan"
+		parameterType="com.gdl.schedule.entity.Plan"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_plan (
+			planDate,
+			planWork,
+			actualWork,
+			actualWorkDate,
+			complete,
+			completeDate,
+			itemID,
+			userID
+		) VALUES (
+			#{planDate},
+			#{planWork},
+			#{actualWork},
+			#{actualWorkDate},
+			#{complete},
+			#{completeDate},
+			#{itemID},
+			#{userID}
+		)
+	</insert>
+	
+	<!-- 修改计划 -->
+	<!-- Integer updatePlan(Plan plan) -->
+	<update id="updatePlan"
+		parameterType="com.gdl.schedule.entity.Plan">
+		UPDATE
+			t_plan
+		SET 
+			<if test="planDate != null">
+				planDate=#{planDate},
+			</if>
+			<if test="planWork != null">
+				planWork=#{planWork},
+			</if>
+			<if test="actualWork != null">
+				actualWork=#{actualWork},
+			</if>
+			<if test="actualWorkDate != null">
+				actualWorkDate=#{actualWorkDate},
+			</if>
+			<if test="complete != null">
+				complete=#{complete},
+			</if>
+			<if test="completeDate != null">
+				completeDate=#{completeDate},
+			</if>
+			<if test="itemID != null">
+				itemID=#{itemID},
+			</if>
+			<if test="userID != null">
+				userID=#{userID},
+			</if>
+			id=#{id}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<!-- 根据id删除计划 -->
+	<!-- Integer deletePlan(Integer id) -->
+	<delete id="deletePlan">
+		DELETE FROM
+			t_plan
+		WHERE
+			id=#{id}
+	</delete>
+
+    <!--批量删除-->
+	<delete id="deleteMorePlans" parameterType="List">
+	<!-- delete from t_books where bid in(7789,7790) -->
+	<!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+	: 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+	delete from t_plan where id in
+	<foreach collection="list" item="id" index="no" open="(" separator="," close=")">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>
+
+
+
+
+
+
+

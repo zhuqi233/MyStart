@@ -1,0 +1,37 @@
+server:
+  port: 8080
+spring:
+  #热部署生效
+  devtools:
+    restart:
+      enabled: true
+      #设置重启的目录
+      additional-paths: src/main/
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      exclude: com/gdl/schedule/**
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    servlet:
+      content-type: text/html
+    encoding: utf-8
+  datasource:
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/schedule?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 200
+    poolPreparedStatements: true
+  mvc:
+    static-path-pattern: /**
+#  jackson:
+#    time-zone: GMT+8
+#    jackson.date-format: yyyy-MM-dd HH:mm:ss
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mappers/*.xml

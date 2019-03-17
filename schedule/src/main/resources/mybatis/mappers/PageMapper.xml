@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdl.schedule.mapper.PageMapper">
+    <!-- resultMap中的type表示返回什么类型的对象 -->
+	<resultMap type="com.gdl.schedule.entity.Plan" id="getPlanMap">
+        <!-- property 表示com.gdl.schedule.entity.Plan中的属性； column 表示表中的列名 -->
+		<id property="id" column="id" />
+		<result property="planDate" column="planDate" />
+		<result property="planWork" column="planWork" />
+		<result property="actualWork" column="actualWork" />
+		<result property="actualWorkDate" column="actualWorkDate" />
+		<result property="complete" column="complete" />
+		<result property="completeDate" column="completeDate" />
+		<result property="itemID" column="itemID" />
+        <result property="userID" column="userID" />
+        <!-- association字面意思关联，这里只专门做一对一关联； property表示是com.gdl.schedule.entity.Plan中的属性名称；javaType表示该属性是什么类型对象 -->
+        <!--<association property="itemID">-->
+            <!--&lt;!&ndash; property 表示com.gdl.schedule.entity.Item中的属性； column 表示表中的列名 &ndash;&gt;-->
+            <!--<id property="id" column="id"/>-->
+            <!--<result property="userID" column="userID"/>-->
+        <!--</association>-->
+	</resultMap>
+	<!-- 查询所有计划 -->
+	<select id="selectAllPlans" resultMap="getPlanMap">
+		select
+            id,planDate,planWork,actualWork,actualWorkDate,complete,completeDate,itemID,userID
+		from 
+			t_plan
+		limit 
+			#{startPos},#{pageSize}
+	</select>
+    <!-- 根据用户id查询计划 -->
+	<select id="selectPlansByUserID" resultMap="getPlanMap">
+		select
+            id,planDate,planWork,actualWork,actualWorkDate,complete,completeDate,itemID,userID
+        from
+            t_plan
+		where
+            userID=#{userID}
+		limit 
+			#{startPos},#{pageSize}
+	</select>
+
+	<select id="findPlansByItemID" resultMap="getPlanMap">
+		SELECT
+			id,planDate,planWork,actualWork,actualWorkDate,complete,completeDate,itemID,userID
+		FROM
+			t_plan
+		where
+			itemID=#{itemID}
+		limit
+			#{startPos},#{pageSize}
+	</select>
+
+	<!--根据关键字查询计划-->
+	<select id="findPlansByKeyword" resultMap="getPlanMap">
+		SELECT
+			id,planDate,planWork,actualWork,actualWorkDate,complete,completeDate,itemID,userID
+		FROM
+			 t_plan
+		WHERE
+			<if test="itemID != null">
+				itemID=#{itemID} AND
+			</if>
+				planWork like '%' #{planWork} '%'
+		LIMIT
+			#{startPos},#{pageSize}
+	</select>
+	<!--<select id="findAllBookByDCAndPage" resultMap="getPlanMap">-->
+		<!--SELECT -->
+			<!--bid,bookname,booktype,entrytime,bookstate    -->
+		<!--FROM -->
+			<!--t_books -->
+		<!--<where> -->
+			<!--booktype=#{code} -->
+			<!--and entrytime between #{starttime} and #{endtime}-->
+		<!--limit -->
+			<!--#{startPos},#{pageSize}	-->
+		<!--</where>-->
+	<!--</select>-->
+
+	<!-- 取得记录的总数 -->
+	<select id="getAllPlanCount" resultType="Integer">
+		SELECT COUNT(*) FROM t_plan
+	</select>
+	<select id="getPlanCountByItemID" resultType="Integer">
+		SELECT COUNT(*) FROM t_plan where itemID=#{itemID}
+	</select>
+	<select id="getPlanCountByUid" resultType="Integer">
+		SELECT COUNT(*) FROM t_plan where userID=#{userID}
+	</select>
+
+	<select id="getPlanCountByKeyword" resultType="Integer">
+		SELECT COUNT(*) FROM t_plan WHERE planWork like '%' #{planWork} '%'
+	</select>
+	<!--<select id="getBookCountByDate" resultType="long">-->
+		<!--SELECT COUNT(*) FROM t_plan WHERE entrytime between #{starttime} and #{endtime} -->
+	<!--</select>-->
+	<!--<select id="getBookCountByDateAndCode" resultType="long">-->
+		<!--SELECT COUNT(*) FROM t_plan WHERE booktype=#{code} and entrytime between #{starttime} and #{endtime} -->
+	<!--</select>-->
+
+</mapper>
